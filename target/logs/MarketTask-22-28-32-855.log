@@ -1,0 +1,5 @@
+2023-01-30 22:28:32,852 INFO i.g.b.w.WebDriverManager [main] Using chromedriver 109.0.5414.74 (resolved driver for Chrome 109)
+2023-01-30 22:28:32,890 INFO i.g.b.w.WebDriverManager [main] Exporting webdriver.chrome.driver as C:\Users\barut\.cache\selenium\chromedriver\win32\109.0.5414.74\chromedriver.exe
+2023-01-30 22:28:46,317 INFO P.MainPage [main] User go to https://hepsiburada.com
+2023-01-30 22:28:48,505 INFO P.MainPage [main] User hover over By.xpath: //*[@id='myAccount']
+2023-01-30 22:28:49,041 INFO P.MainPage [main] User clicks login button
