@@ -2,6 +2,8 @@ package Base;
 
 import Utilities.ConfigReader;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,19 +58,17 @@ public class BaseStepMethod {
         return element;
     }
 
-    protected void AssertText(By locator, String text) {
-        Boolean element = null;
+    protected void AssertText(By locator, String text){
+        Boolean element=null;
         try {
-            element = wait.until(ExpectedConditions.textToBe(locator, text));
-        } catch (Exception e) {
+            element=wait.until(ExpectedConditions.textToBe(locator,text));
+        }catch (Exception e){
             LOGGER.error("Text's value is not equals");
         }
     }
-
-    protected void ContainsText(By locator, String text) {
+    protected void ContainsText(By locator,String text){
         Assert.assertTrue(getTextElement(locator).contains(text));
     }
-
     protected void AssertURL(String URL) {
         Boolean element = null;
 
@@ -79,12 +79,10 @@ public class BaseStepMethod {
             //System.out.println(URL);
         }
     }
-
     protected void clickElement(By locator) {
         WebElement element = this.waitVisibleByLocator(locator);
         waitClickableByOfElement(element).click();
     }
-
     public static void waitForPageToLoad(Duration timeOutInSeconds) {
         ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
@@ -122,7 +120,6 @@ public class BaseStepMethod {
         }
         return element;
     }
-
     public static void waitFor(int sec) {
         try {
             Thread.sleep(sec * 1000);
@@ -136,14 +133,12 @@ public class BaseStepMethod {
         action.moveToElement(driver.findElement(locator)).pause(Duration.ofSeconds(second)).perform();
 
     }
-
     protected void selectElementVisibleText(By locator, String text) {
-        Select select = new Select(driver.findElement(locator));
+        Select select=new Select(driver.findElement(locator));
         select.selectByVisibleText(text);
     }
-
     protected void selectElementByIndex(By locator, int index) {
-        Select select = new Select(driver.findElement(locator));
+        Select select=new Select(driver.findElement(locator));
         select.selectByIndex(index);
     }
 
@@ -161,6 +156,7 @@ public class BaseStepMethod {
     protected void checkStatusNetwork() throws IOException {
         LOGGER.info("User connecting to the Http Network status of the page.");
 
+
         HttpURLConnection cn = (HttpURLConnection) new URL(driver.getCurrentUrl()).openConnection();
 
         cn.setRequestMethod("HEAD");
@@ -168,6 +164,7 @@ public class BaseStepMethod {
         Integer c = cn.getResponseCode();
 
         LOGGER.info(driver.getCurrentUrl() + " Http status code: " + c);
+
 
         Assert.assertFalse(c.toString().startsWith("4") || c.toString().startsWith("5"), c + "Invalid Link " + driver.getCurrentUrl());
         cn.disconnect();
@@ -185,6 +182,7 @@ public class BaseStepMethod {
             Integer c = cn.getResponseCode();
             LOGGER.info(imgURL + " Http status code: " + c);
 
+
             Assert.assertFalse(c.toString().startsWith("4") || c.toString().startsWith("5"), c + "Broken pic " + imgURL);
             cn.disconnect();
         } catch (Exception e) {
@@ -194,6 +192,7 @@ public class BaseStepMethod {
 
     protected void checkStatusNetworkNotAssertion() throws IOException {
         LOGGER.info("Kullanıcı sayfanın Http Network status'üne bağlanıyor.");
+
 
         HttpURLConnection cn = (HttpURLConnection) new URL(driver.getCurrentUrl())
                 .openConnection();
@@ -247,6 +246,7 @@ public class BaseStepMethod {
 
         Assert.assertFalse(c.toString().startsWith("4") || c.toString().startsWith("5"), c + "Invalid Link " + driver.getCurrentUrl());
 
+
     }
 
     protected void assertContains(Object actual, Object... expected) {
@@ -269,6 +269,8 @@ public class BaseStepMethod {
         return currentDate;
 
     }
+
+
 
     protected String getTabTitle() {
         return driver.getTitle();
@@ -339,5 +341,27 @@ public class BaseStepMethod {
             return null;
         }
     }
+    protected void csvWriter(By locator) throws IOException {
+        String csv = "C:\\Users\\barut\\IdeaProjects\\MarketTask\\productTitle.csv";
+        FileWriter fr=new FileWriter(csv);
+        BufferedWriter br=new BufferedWriter(fr);
+        br.write(getTextElement(locator));
+        br.close();
+    }
+    public String csvReader() throws IOException, CsvException {
+        CSVReader reader = new CSVReader(new FileReader("C:\\Users\\barut\\IdeaProjects\\MarketTask\\productTitle.csv"));
+        String[] csvCell;
+
+        while ((csvCell=reader.readNext())!=null){
+            titleCSV=csvCell[0];
+
+        }
+        return titleCSV;
+
+    }
+    public void go_To_HepsiBuradaSepetim(){
+        driver.navigate().to(ConfigReader.getProperty("sepetimURL"));
+    }
+
 
 }
